@@ -1,0 +1,25 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Grim",
+  "license": "ISC",
+  "dependencies": {
+    "@chainlink/contracts": "^0.2.2",
+    "@openzeppelin/contracts": "^4.4.0",
+    "@openzeppelin/test-helpers": "^0.5.15",
+    "@truffle/hdwallet-provider": "^1.7.0",
+    "@uniswap/v2-core": "^1.0.1",
+    "@uniswap/v2-periphery": "^1.1.0-beta.0",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
+    "truffle-plugin-verify": "^0.5.18"
+  }
+}
