@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 
-contract ReflectionToken is Context, IERC20, Ownable {
+contract Play2Burn is Context, IERC20, Ownable {
     using SafeMath for uint256;
     using Address for address;
 
@@ -22,12 +22,12 @@ contract ReflectionToken is Context, IERC20, Ownable {
     address[] private _excluded;
 
     uint256 private constant MAX = ~uint256(0);
-    uint256 private _tTotal = 1 * 10**9 * 10**9;
+    uint256 private _tTotal = 1* 10**11 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
-    string private _name = "Reflection Token";
-    string private _symbol = "RFI";
+    string private _name = "Play2Burn";
+    string private _symbol = "P2B";
     uint8 private _decimals = 9;
 
     struct BuyFee {
@@ -55,14 +55,14 @@ contract ReflectionToken is Context, IERC20, Ownable {
     IUniswapV2Router02 public uniswapV2Router;
     address public uniswapV2Pair;
 
-    address public _marketingWallet = payable(address(0x123));
-    address public _rewardWallet = payable(address(0x456));
+    address public _marketingWallet = payable(address(0xBa0cFfa69A87b8Bae5C6b35FB6dA26B1ebF61a05));
+    address public _rewardWallet = payable(address(0xEa338fe57024F2d463E8991d4A4223e5A3E847ac));
 
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = true;
 
-    uint256 public _maxTxAmount = 1 * 10**7 * 10**9;
-    uint256 private numTokensSellToAddToLiquidity = 1 * 10**6 * 10**9;
+    uint256 public _maxTxAmount = 1 * 10**9 * 10**9;
+    uint256 private numTokensSellToAddToLiquidity = 1 * 10**7 * 10**9;
 
     event MinTokensBeforeSwapUpdated(uint256 minTokensBeforeSwap);
     event SwapAndLiquifyEnabledUpdated(bool enabled);
@@ -92,7 +92,7 @@ contract ReflectionToken is Context, IERC20, Ownable {
         sellFee.taxFee = 3;
 
         IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(
-            0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
+            0x10ED43C718714eb63d5aA57B78B54704E256024E
         );
         // Create a uniswap pair for this new token
         uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
@@ -281,12 +281,18 @@ contract ReflectionToken is Context, IERC20, Ownable {
         _isExcludedFromFee[account] = false;
     }
 
-    function setTaxFeePercent(uint16 taxFee) external onlyOwner {
-        _taxFee = taxFee;
+    function setBuyFee(uint16 liq, uint16 market, uint16 reward, uint16 tax) external onlyOwner {
+        buyFee.liquidityFee = liq;
+        buyFee.marketingFee = market;
+        buyFee.rewardFee = reward;
+        buyFee.taxFee = tax;
     }
 
-    function setLiquidityFeePercent(uint16 liquidityFee) external onlyOwner {
-        _liquidityFee = liquidityFee;
+    function setSellFee(uint16 liq, uint16 market, uint16 reward, uint16 tax) external onlyOwner {
+        sellFee.liquidityFee = liq;
+        sellFee.marketingFee = market;
+        sellFee.rewardFee = reward;
+        sellFee.taxFee = tax;
     }
 
     function setNumTokensSellToAddToLiquidity(uint256 numTokens)
@@ -307,8 +313,8 @@ contract ReflectionToken is Context, IERC20, Ownable {
         uniswapV2Pair = _uniswapV2Pair;
     }
 
-    function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner {
-        _maxTxAmount = _tTotal.mul(maxTxPercent).div(10**2);
+    function setMaxTx(uint256 maxTx) external onlyOwner {
+        _maxTxAmount = maxTx;
     }
 
     function setSwapAndLiquifyEnabled(bool _enabled) public onlyOwner {
